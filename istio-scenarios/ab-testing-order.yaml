@@ -1,0 +1,28 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: order-service
+  namespace: microservices
+spec:
+  hosts:
+    - "*"
+  gateways:
+    - microservices-gateway
+  http:
+    - match:
+        - headers:
+            user-type:
+              exact: premium
+          uri:
+            prefix: /api/orders
+      route:
+        - destination:
+            host: order-service
+            subset: v2
+    - match:
+        - uri:
+            prefix: /api/orders
+      route:
+        - destination:
+            host: order-service
+            subset: v1

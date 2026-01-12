@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: product-service-v2
+  namespace: microservices
+  labels:
+    app: product-service
+    version: v2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: product-service
+      version: v2
+  template:
+    metadata:
+      labels:
+        app: product-service
+        version: v2
+    spec:
+      containers:
+        - name: product-service
+          image: acristio1767868439.azurecr.io/product-service:v2
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+              name: http
+          env:
+            - name: SERVICE_VERSION
+              value: "v2"
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: DB_HOST
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: DB_NAME
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: DB_USER
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: DB_PASSWORD
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"

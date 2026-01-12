@@ -1,0 +1,7 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+/istio-1.28.2/
+/product-service/target/
+/order-service/target/
+/azure-resources.env

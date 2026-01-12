@@ -1,0 +1,18 @@
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: allow-order-to-product
+  namespace: microservices
+spec:
+  selector:
+    matchLabels:
+      app: product-service
+  action: ALLOW
+  rules:
+    - from:
+        - source:
+            principals: ["cluster.local/ns/microservices/sa/default"]
+      to:
+        - operation:
+            methods: ["GET", "POST"]
+            paths: ["/api/products/*"]
